@@ -22,7 +22,8 @@ EOS
 # ----------------------------------------------------------
 # Const
 # ----------------------------------------------------------
-REGION=ap-northeast-1
+#REGION=ap-northeast-1
+REGION=ap-southeast-1
 TMP_DIR=tmp
 THING_NAME=iot_demo
 TOPIC_NAME=iot_device
@@ -77,6 +78,8 @@ cat ${TMP_DIR}/certificate.json | jq .keyPair.PrivateKey -r > ${THING_NAME}_priv
 
 certificateId=`cat ${TMP_DIR}/certificate.json |jq -r .certificateId`
 aws iot describe-certificate --region ${REGION} --certificate-id ${certificateId}  --output text --query certificateDescription.certificatePem > ${THING_NAME}_certificate.pem 
+
+curl -s https://www.symantec.com/content/en/us/enterprise/verisign/roots/VeriSign-Class%203-Public-Primary-Certification-Authority-G5.pem -o rootCA.pem >/dev/null
 
 echo "create certificate OK" 
 
@@ -173,5 +176,6 @@ echo "certificate --------------------------------------"
 echo ${THING_NAME}_publickey.pem
 echo ${THING_NAME}_privatekey.pem
 echo ${THING_NAME}_certificate.pem
+echo rootCA.pem
 echo "--------------------------------------------------"
 
