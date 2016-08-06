@@ -1,4 +1,4 @@
-#! /bin/sh -e
+#! /bin/sh 
 # ----------------------------------------------------------
 # AWS IoT demo用のセット作成
 # ----------------------------------------------------------
@@ -8,22 +8,21 @@
 # ----------------------------------------------------------
 function usage() {
 cat <<EOS
-=======================================
+============================================================
 【前提】
 ・AWS CLIがインストールされている。Access Key,Secret Keyが設定されていること
 ・jqがインストールされていること
 【使い方】
 第１引数：AWSアカウントID
-第２引数：S3バケット名
-=======================================
+第２引数：S3バケット名（同一リージョンで事前に作成しておく）
+===========================================================
 EOS
 }
 
 # ----------------------------------------------------------
 # Const
 # ----------------------------------------------------------
-#REGION=ap-northeast-1
-REGION=ap-southeast-1
+REGION=ap-northeast-1
 TMP_DIR=tmp
 THING_NAME=iot_demo
 TOPIC_NAME=iot_device
@@ -104,7 +103,13 @@ echo "create iot policy OK"
 # ----------------------------------------------------------
 #証明書の紐付け
 # ----------------------------------------------------------
+aws iot attach-principal-policy --region ${REGION} --principal "arn:aws:iot:${REGION}:${aws_account_id}:cert/${certificateId}" --policy-name ${THING_NAME}_policy >/dev/null
+
+echo "attach-principal-policy OK"
+
 aws iot attach-thing-principal --region ${REGION} --thing-name ${THING_NAME} --principal "arn:aws:iot:${REGION}:${aws_account_id}:cert/${certificateId}" >/dev/null
+
+echo "attach-thing-principal OK"
 
 # ----------------------------------------------------------
 # Rule作成
@@ -154,8 +159,8 @@ cat << EOS > ${TMP_DIR}/${THING_NAME}_rule.json
                 "s3": {
                     "roleArn": "string",
                     "roleArn" : "arn:aws:iam::${aws_account_id}:role/aws_iot_s3_role",
-                    "bucketName": "string",
-                    "key": "string"
+                    "bucketName": "${s3_bucket_name}",
+                    "key": "${TOPIC_NAME}"
                 }
             }
         ],
