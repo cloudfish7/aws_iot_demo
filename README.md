@@ -4,17 +4,17 @@
 
 ### **1.** s3bucketを作成する
 
-### **2.** Amazon Linuxを起動する
-
-### **3.** aws iot_demoをダウンロードする
+### **2.** aws iot_demoをcloneする(Amazon Linux)
 `git clone https://github.com/cloudfish7/aws_iot_demo.git`
 
-### **4.** demo用環境構築
-`sh ./create_aws_iot_demo.sh aws_account_id s3_bucket_name`
+### **3.** demo用環境構築
+export AWS_ACCESS_KEY=XXXXXXXXXXXXXXX
+export AWS_SECRET_KEY=YYYYYYYYYYYYYYYY
+sh ./create_aws_iot_demo.sh aws_account_id s3_bucket_name`
 
-### **5.** AWSIoTPythonSDKのインストール
+### **4.** AWSIoTPythonSDKのインストール
 `pip install AWSIoTPythonSDK` 
 
-### **6.** サンプル実行
+### **5.** サンプル実行
 `python iotPublishDemo.py endpoint rootCA certificate privateKey`
 
